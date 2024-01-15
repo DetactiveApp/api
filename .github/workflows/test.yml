@@ -18,9 +18,14 @@ jobs:
         uses: denoland/setup-deno@v1
         with:
           deno-version: v1.1.3
-
+      
       - name: 🔎 Run Lint
-        run: deno fmt
+        continue-on-error: true
+        run: deno lint
+
+      - name: 🛠️ Check Format
+        continue-on-error: true
+        run: deno fmt --check
 
       - name: 🧪 Run Test
         run: deno test
