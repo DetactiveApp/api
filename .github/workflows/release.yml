@@ -1,0 +1,46 @@
+name: Release
+
+on:
+  push:
+    branches: [release]
+  pull_request:
+    branches: [release]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🛒 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🦕 Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.1.3
+
+      - name: 🔎 Run Lint
+        run: deno fmt --check
+
+      - name: 🧪 Run Test
+        run: deno test
+
+      - name: ⚙️ Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+
+      - name: 📦 Install release-it globally
+        run: npm install -g release-it @release-it/bumper @release-it/conventional-changelog
+
+      - name: 🤖 Initialize Git User
+        run: |
+          git config --global user.email "detactive.app@gmail.com"
+          git config --global user.name "[CI]"
+
+      - name: 🏷️ Create GitHub Release
+        run: npx release-it --ci
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

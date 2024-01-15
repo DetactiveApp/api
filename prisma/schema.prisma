@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Media {
+  AUDIO
+  IMAGE
+  VIDEO
+}
+
+enum Ending {
+  SUCCESS
+  FAILURE
+}
+
+model User {
+  uuid  String  @id @default(uuid())
+  email String?
+}
+
+model Decision {
+  uuid           String @id @default(uuid())
+  stepInputUuid  String
+  stepOutputUuid String
+  title          String
+}
+
+model UserStory {
+  uuid       String    @id @default(uuid())
+  storyUuid  String
+  userUuid   String
+  createdAt  DateTime  @default(now())
+  deletedAt  DateTime?
+  finishedAt DateTime?
+}
+
+model UserStoryStep {
+  userStoryUuid String    @id
+  stepUuid      String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now())
+  finishedAt    DateTime?
+  latitude      Float
+  longitude     Float
+}
+
+model Step {
+  uuid         String  @id @default(uuid())
+  storyUuid    String
+  waypointUuid String?
+  assetId      String?
+  description  String
+  mediaType    Media
+  title        String
+  ending       Ending
+}
+
+model Story {
+  uuid        String  @id @default(uuid())
+  active      Boolean @default(false)
+  assetId     String?
+  description String
+  title       String
+}
+
+model Waypoint {
+  uuid String  @id @default(uuid())
+  poi  String?
+}
