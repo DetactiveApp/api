@@ -1,0 +1,30 @@
+name: Release
+
+on:
+  push:
+    branches: [release]
+  pull_request:
+    branches: [release]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⚙️ Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+
+      - name: 📦 Install release-it globally
+        run: npm install -g release-it @release-it/bumper @release-it/conventional-changelog
+
+      - name: 🤖 Initialize Git User
+        run: |
+          git config --global user.email "detactive.app@gmail.com"
+          git config --global user.name "[CI]"
+
+      - name: 🏷️ Create GitHub Release
+        run: npx release-it --ci
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
