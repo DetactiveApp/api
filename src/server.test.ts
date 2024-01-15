@@ -1,1 +1,1 @@
-Deno.test('Entry Point', () => { })
+Deno.test("Entry Point", () => {});

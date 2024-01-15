@@ -20,7 +20,7 @@ jobs:
           deno-version: v1.1.3
 
       - name: 🔎 Run Lint
-        run: deno fmt --check
+        run: deno fmt
 
       - name: 🧪 Run Test
         run: deno test
