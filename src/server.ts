@@ -1,13 +1,8 @@
-import { GraphQLHTTP } from 'https://deno.land/x/gql@2.0.1/mod.ts'
+import { createYoga } from 'npm:graphql-yoga@^5.1.1';
 
-export const handler = (request: Request) => {
-    if (new URL(request.url).pathname == '/graphql') {
-        return GraphQLHTTP<Request>({
-            graphiql: true
-        })(request)
-    }
+const yoga = createYoga({
 
-    return new Response("Detactive API v0.0.0-alpha", { status: 200 })
-}
+    landingPage: false,
+});
 
-Deno.serve({ port: 3000, handler })
+Deno.serve(yoga);
