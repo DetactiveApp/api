@@ -1,6 +1,6 @@
 import { GraphQLHTTP } from 'https://deno.land/x/gql@2.0.1/mod.ts'
 
-const handler = (request: Request) => {
+export const handler = (request: Request) => {
     if (new URL(request.url).pathname == '/graphql') {
         return GraphQLHTTP<Request>({
             graphiql: true
