@@ -1,15 +1,18 @@
 {
-  "name": "app",
-  "version": "1.0.50",
+  "name": "api",
+  "version": "0.0.0-alpha",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun run --watch src/index.ts"
   },
   "dependencies": {
-    "elysia": "latest"
+    "@prisma/client": "5.8.1",
+    "elysia": "latest",
+    "typegraphql-prisma": "^0.27.1"
   },
   "devDependencies": {
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "prisma": "^5.8.1"
   },
   "module": "src/index.js"
 }

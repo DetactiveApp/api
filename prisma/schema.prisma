@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Decision {
+  uuid                               String @id
+  stepInputUuid                      String
+  stepOutputUuid                     String
+  title                              String
+  Step_Decision_stepInputUuidToStep  Step   @relation("Decision_stepInputUuidToStep", fields: [stepInputUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_step_input")
+  Step_Decision_stepOutputUuidToStep Step   @relation("Decision_stepOutputUuidToStep", fields: [stepOutputUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_step_output")
+}
+
+model Step {
+  uuid                                   String          @id
+  storyUuid                              String
+  waypointUuid                           String?
+  assetId                                String?
+  description                            String
+  media                                  Media?
+  title                                  String
+  ending                                 Ending?
+  Decision_Decision_stepInputUuidToStep  Decision[]      @relation("Decision_stepInputUuidToStep")
+  Decision_Decision_stepOutputUuidToStep Decision[]      @relation("Decision_stepOutputUuidToStep")
+  Story                                  Story           @relation(fields: [storyUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_story")
+  Waypoint                               Waypoint?       @relation(fields: [waypointUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_waypoint")
+  UserStoryStep                          UserStoryStep[]
+}
+
+model Story {
+  uuid        String      @id
+  active      Boolean     @default(false)
+  assetId     String?
+  description String
+  title       String
+  Step        Step[]
+  UserStory   UserStory[]
+}
+
+model User {
+  uuid      String      @id
+  email     String?
+  UserStory UserStory[]
+}
+
+model UserStory {
+  uuid          String          @id
+  storyUuid     String
+  userUuid      String
+  createdAt     DateTime        @default(now())
+  deletedAt     DateTime?
+  finishedAt    DateTime?
+  Story         Story           @relation(fields: [storyUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_story")
+  User          User            @relation(fields: [userUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_user")
+  UserStoryStep UserStoryStep[]
+}
+
+model UserStoryStep {
+  userStoryUuid String
+  stepUuid      String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now())
+  finishedAt    DateTime?
+  latitude      Float
+  longitude     Float
+  Step          Step      @relation(fields: [stepUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_step")
+  UserStory     UserStory @relation(fields: [userStoryUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_user_story")
+
+  @@id([userStoryUuid, stepUuid])
+}
+
+model Waypoint {
+  uuid      String  @id
+  placeType String?
+  Step      Step[]
+}
+
+enum Ending {
+  SUCCESS
+  FAILURE
+}
+
+enum Media {
+  AUDIO
+  IMAGE
+  VIDEO
+}
