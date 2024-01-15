@@ -20,7 +20,7 @@ jobs:
       
       - name: 🔎 Run Lint
         continue-on-error: true
-        run: deno --unstable lint
+        run: deno lint --unstable
 
       - name: 🛠️ Check Format
         continue-on-error: true
