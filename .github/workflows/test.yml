@@ -2,7 +2,6 @@ name: Test
 
 on:
   push:
-  pull_request:
 
 jobs:
   test:
@@ -21,7 +20,7 @@ jobs:
       
       - name: 🔎 Run Lint
         continue-on-error: true
-        run: deno lint
+        run: deno --unstable lint
 
       - name: 🛠️ Check Format
         continue-on-error: true
