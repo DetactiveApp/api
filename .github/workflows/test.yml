@@ -1,13 +1,11 @@
-name: Development
+name: Test
 
 on:
   push:
-    branches: [development]
   pull_request:
-    branches: [development]
 
 jobs:
-  development:
+  test:
     runs-on: ubuntu-latest
 
     steps:
