@@ -1,5 +1,3 @@
-import Decision from "./Decicsion/index.graphql"
-
 interface Decision {
     uuid:                               String!
     stepInputUuid:                      String!
