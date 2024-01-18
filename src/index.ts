@@ -1,13 +1,15 @@
 import yoga from "@elysiajs/graphql-yoga";
 import { Elysia } from "elysia";
-import { resolvers } from "./resolvers";
+import { typeDefs, resolvers } from "./schema";
+import {  PrismaClient } from "@prisma/client";
 
+export const db_client = new PrismaClient()
 const api_version = require('../package.json').version;
 
 new Elysia()
     .use(
         yoga({
-            typeDefs: await Bun.file("src/types/index.graphql").text(),
+            typeDefs: typeDefs,
             resolvers: resolvers
         })
     )

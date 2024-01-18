@@ -8,6 +8,8 @@
   "dependencies": {
     "@prisma/client": "5.8.1",
     "elysia": "latest",
+    "graphql": "^16.8.1",
+    "type-graphql": "^1.1.1",
     "typegraphql-prisma": "^0.27.1"
   },
   "devDependencies": {
