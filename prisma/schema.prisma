@@ -8,76 +8,76 @@ datasource db {
 }
 
 model Decision {
-  uuid                               String @id
-  stepInputUuid                      String
-  stepOutputUuid                     String
-  title                              String
-  Step_Decision_stepInputUuidToStep  Step   @relation("Decision_stepInputUuidToStep", fields: [stepInputUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_step_input")
-  Step_Decision_stepOutputUuidToStep Step   @relation("Decision_stepOutputUuidToStep", fields: [stepOutputUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_step_output")
+  uuid           String @id
+  stepInputUuid  String
+  stepOutputUuid String
+  title          String
+  stepInput      Step   @relation("inputDecision", fields: [stepInputUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_step_input")
+  stepOutput     Step   @relation("outputDecision", fields: [stepOutputUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_step_output")
 }
 
 model Step {
-  uuid                                   String          @id
-  storyUuid                              String
-  waypointUuid                           String?
-  assetId                                String?
-  description                            String
-  media                                  Media?
-  title                                  String
-  ending                                 Ending?
-  Decision_Decision_stepInputUuidToStep  Decision[]      @relation("Decision_stepInputUuidToStep")
-  Decision_Decision_stepOutputUuidToStep Decision[]      @relation("Decision_stepOutputUuidToStep")
-  Story                                  Story           @relation(fields: [storyUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_story")
-  Waypoint                               Waypoint?       @relation(fields: [waypointUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_waypoint")
-  UserStoryStep                          UserStoryStep[]
+  uuid           String     @id
+  storyUuid      String
+  waypointUuid   String?
+  assetId        String?
+  description    String
+  media          Media?
+  title          String
+  ending         Ending?
+  inputDecision  Decision[] @relation("inputDecision")
+  outputDecision Decision[] @relation("outputDecision")
+  gameStep       GameStep[]
+  story          Story      @relation(fields: [storyUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_story")
+  waypoint       Waypoint?  @relation(fields: [waypointUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_waypoint")
 }
 
 model Story {
-  uuid        String      @id
-  active      Boolean     @default(false)
+  uuid        String  @id @default(uuid())
+  active      Boolean @default(false)
   assetId     String?
   description String
   title       String
-  Step        Step[]
-  UserStory   UserStory[]
+  game        Game[]
+  step        Step[]
 }
 
 model User {
-  uuid      String      @id
-  email     String?
-  UserStory UserStory[]
+  uuid  String  @id
+  email String?
+  game  Game[]
 }
 
-model UserStory {
-  uuid          String          @id
-  storyUuid     String
-  userUuid      String
-  createdAt     DateTime        @default(now())
-  deletedAt     DateTime?
-  finishedAt    DateTime?
-  Story         Story           @relation(fields: [storyUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_story")
-  User          User            @relation(fields: [userUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_user")
-  UserStoryStep UserStoryStep[]
+model Game {
+  uuid       String     @id
+  storyUuid  String
+  userUuid   String
+  createdAt  DateTime   @default(now())
+  deletedAt  DateTime?
+  finishedAt DateTime?
+  story      Story      @relation(fields: [storyUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_story")
+  user       User       @relation(fields: [userUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_user")
+  gameStep   GameStep[]
 }
 
-model UserStoryStep {
-  userStoryUuid String
-  stepUuid      String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @default(now())
-  finishedAt    DateTime?
-  latitude      Float
-  longitude     Float
-  Step          Step      @relation(fields: [stepUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_step")
-  UserStory     UserStory @relation(fields: [userStoryUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_user_story")
+model GameStep {
+  gameUuid   String
+  stepUuid   String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now())
+  finishedAt DateTime?
+  latitude   Float
+  longitude  Float
+  step       Step      @relation(fields: [stepUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_step")
+  game       Game      @relation(fields: [gameUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_user_story")
 
-  @@id([userStoryUuid, stepUuid])
+  @@id([gameUuid, stepUuid])
 }
 
 model Waypoint {
   uuid      String  @id
   placeType String?
-  Step      Step[]
+  step      Step[]
 }
 
 enum Ending {
