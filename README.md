@@ -9,6 +9,11 @@ Make sure that you have set up the environment variables as in the (template)[./
 ## Run Locally
 You can start the api by running `bun run dev`.
 
+```bash
+# http://localhost:3000
+# http://localhost:3000/graphql
+```
+
 ## Run Tests
 To run tests, run the following command
 ```bash
