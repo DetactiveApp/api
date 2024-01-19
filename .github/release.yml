@@ -11,13 +11,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: ⚙️ Set up Node.js
-        uses: actions/setup-node@v4
+      - name: ⚙️ Set up Bun
+        uses: oven-sh/setup-bun@v1
         with:
-          node-version: latest
+          bun-version: latest
 
       - name: 📦 Install release-it globally
-        run: npm install -g release-it @release-it/bumper @release-it/conventional-changelog
+        run: bun i -g release-it @release-it/bumper @release-it/conventional-changelog
 
       - name: 🤖 Initialize Git User
         run: |
@@ -25,6 +25,6 @@ jobs:
           git config --global user.name "[CI]"
 
       - name: 🏷️ Create GitHub Release
-        run: npx release-it --ci
+        run: bunx release-it --ci
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

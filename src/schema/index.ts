@@ -1,12 +1,13 @@
-import { StoryMutation, StoryQuery, StoryTypes } from "./story"
+import {  GraphQLObjectType,  GraphQLSchema } from "graphql";
+import { StoryGraphQlType } from "./types";
 
-
-export const typeDefs = /* GraphQL */`
-     type Query
-     ${StoryTypes}
-`
-export const resolvers = {
-   Query: {
-      ... StoryQuery
-   }
-}
+const schema = new GraphQLSchema({
+   query: new GraphQLObjectType({
+      name: "Query",
+      fields: {
+         story: {
+            type: StoryGraphQlType
+         }
+      }
+   })
+})
