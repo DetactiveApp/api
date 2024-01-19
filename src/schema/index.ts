@@ -1,4 +1,9 @@
-import { GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql";
+import {
+  GraphQLList,
+  GraphQLObjectType,
+  GraphQLSchema,
+  GraphQLString,
+} from "graphql";
 import { Story } from "./story";
 import { db_client } from "..";
 
@@ -19,6 +24,13 @@ export const schema = new GraphQLSchema({
           uuid: {
             type: GraphQLString,
           },
+        },
+      },
+      stories: {
+        type: new GraphQLList(Story),
+        resolve: async (parent, args, context, info) => {
+          const stories = db_client.story.findMany();
+          return stories;
         },
       },
     },
