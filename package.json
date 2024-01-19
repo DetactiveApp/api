@@ -8,7 +8,9 @@
   "dependencies": {
     "@prisma/client": "5.8.1",
     "elysia": "latest",
-    "graphql": "^16.8.1"
+    "graphql": "^16.8.1",
+    "graphql-yoga": "^5.1.1",
+    "prettier": "^3.2.4"
   },
   "devDependencies": {
     "bun-types": "latest",
