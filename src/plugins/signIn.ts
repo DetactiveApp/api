@@ -3,18 +3,23 @@ import { db_client } from "..";
 import { jwtDetactive } from "./jwtDetactive";
 
 export const signIn = new Elysia().use(jwtDetactive).post(
-  "/signUp",
+  "/signIn",
   async ({ body, jwt, params }) => {
-    {
-      const uuid = (await db_client.user.findFirst({
-        where: {
-          email: body.email,
-          secret: await Bun.password.hash(body.password),
-        },
-      }))!.uuid;
+    const user = await db_client.user.findFirst({
+      where: {
+        email: body.email,
+      },
+    });
 
-      return { token: await jwt.sign({ params, sub: uuid }) };
+    if (!user) {
+      throw new Error("Not found.");
     }
+
+    if (await Bun.password.verify(body.password, user.secret)) {
+      return { token: await jwt.sign({ params, sub: user.uuid }) };
+    }
+
+    throw new Error("Wrong password.");
   },
   {
     body: t.Object({
