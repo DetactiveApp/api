@@ -3,11 +3,13 @@ import { PrismaClient } from "@prisma/client";
 import swagger from "@elysiajs/swagger";
 import { guard } from "./guard";
 import { signUp, jwtDetactive, signIn } from "./plugins";
+import cors from "@elysiajs/cors";
 
 export const db_client = new PrismaClient();
 const api_version = require("../package.json").version;
 
 new Elysia()
+  .use(cors())
   .use(swagger())
   .use(jwtDetactive)
   .use(signUp)

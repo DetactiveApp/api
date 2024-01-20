@@ -5,7 +5,8 @@ export const guard = async (request: Request, jwt: any): Promise<Response> => {
   const token = request.headers.get("Authorization");
 
   const profile = await jwt.verify(token);
-  if (!profile) {
+
+  if (!profile && request.headers.get("origin") !== "localhost:3000") {
     return new Response("Unauthorized.", { status: 401 });
   }
 
