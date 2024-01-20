@@ -1,15 +1,20 @@
-import { Elysia } from "elysia";
+import { Elysia, t } from "elysia";
 import { PrismaClient } from "@prisma/client";
-import { createYoga } from "graphql-yoga";
-import { schema } from "./schema";
+import swagger from "@elysiajs/swagger";
+import { guard } from "./guard";
+import { signUp, jwtDetactive, signIn } from "./plugins";
+import cors from "@elysiajs/cors";
 
 export const db_client = new PrismaClient();
 const api_version = require("../package.json").version;
 
-const yoga = createYoga({ cors: false, schema: schema });
-
 new Elysia()
+  .use(cors())
+  .use(swagger())
+  .use(jwtDetactive)
+  .use(signUp)
+  .use(signIn)
   .get("/", `Detactive API v${api_version}`)
-  .get("/graphql", ({ request }) => yoga.fetch(request))
-  .post("/graphql", ({ request }) => yoga.fetch(request))
+  .get("/graphql", async ({ request, jwt }) => guard(request, jwt))
+  .post("/graphql", async ({ request, jwt }) => guard(request, jwt))
   .listen(3000);

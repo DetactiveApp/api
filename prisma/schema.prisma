@@ -43,9 +43,13 @@ model Story {
 }
 
 model User {
-  uuid  String  @id
-  email String?
-  game  Game[]
+  uuid      String   @id @default(uuid())
+  email     String?  @unique
+  createdAt DateTime @default(now())
+  secret    String @default("")
+  firstName String
+  lastName  String
+  game      Game[]
 }
 
 model Game {
