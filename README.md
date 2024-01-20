@@ -17,7 +17,7 @@ You can start the api by running `bun run dev`.
 # http://localhost:3000/swagger
 ```
 
-To access `/graphql` without authorization make sure to set the origin in the header to `localhost:3000` while running the api locally.
+NOTE: `/graphql` is not accessible in production without authorization.
 
 ## Run Tests
 

@@ -3,10 +3,9 @@ import { schema } from "./schema";
 
 export const guard = async (request: Request, jwt: any): Promise<Response> => {
   const token = request.headers.get("Authorization");
-
   const profile = await jwt.verify(token);
 
-  if (!profile && request.headers.get("origin") !== "localhost:3000") {
+  if (!profile && process.env.NODE_ENV !== "development") {
     return new Response("Unauthorized.", { status: 401 });
   }
 
