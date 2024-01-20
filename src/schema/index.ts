@@ -30,16 +30,19 @@ export const schema = new GraphQLSchema({
       stories: {
         type: new GraphQLList(Story),
         resolve: async (parent, args, context, info) => {
-          const stories = Object.keys(args).length === 0
+          const stories =
+            Object.keys(args).length === 0
               ? await db_client.story.findMany()
-              : await db_client.story.findMany({where: {active: args.active}})
+              : await db_client.story.findMany({
+                  where: { active: args.active },
+                });
           return stories;
         },
         args: {
           active: {
-            type: GraphQLBoolean
-          }
-        }
+            type: GraphQLBoolean,
+          },
+        },
       },
     },
   }),
