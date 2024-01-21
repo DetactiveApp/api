@@ -12,6 +12,10 @@ export const guard = async (request: Request, jwt: any): Promise<Response> => {
   return createYoga({
     cors: false,
     schema: schema,
-    context: {},
+    context: {
+      user: {
+        uuid: profile.sub,
+      },
+    },
   }).fetch(request);
 };
