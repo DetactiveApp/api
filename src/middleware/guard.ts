@@ -19,7 +19,8 @@ export const guard = shield(
       "*": guardRule,
     },
     Mutation: {
-      signUp: not(guardRule),
+      signUp: allow,
+      signIn: allow,
       "*": guardRule,
     },
   },
