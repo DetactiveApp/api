@@ -12,6 +12,10 @@ export const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: "Query",
     fields: {
+      ping: {
+        type: GraphQLString,
+        resolve: () => "Pong!",
+      },
       story: {
         type: Story,
         resolve: async (parent, args, context, info) => {
