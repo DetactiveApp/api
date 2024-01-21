@@ -7,6 +7,7 @@ import {
 } from "graphql";
 import { Story } from "./story";
 import { db_client } from "..";
+import { Token } from "./authorization";
 
 export const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -45,6 +46,39 @@ export const schema = new GraphQLSchema({
         args: {
           active: {
             type: GraphQLBoolean,
+          },
+        },
+      },
+    },
+  }),
+  mutation: new GraphQLObjectType({
+    name: "Mutation",
+    fields: {
+      signUp: {
+        type: Token,
+        args: {
+          email: {
+            type: GraphQLString,
+          },
+          password: {
+            type: GraphQLString,
+          },
+          firstName: {
+            type: GraphQLString,
+          },
+          lastName: {
+            type: GraphQLString,
+          },
+        },
+      },
+      signIn: {
+        type: Token,
+        args: {
+          email: {
+            type: GraphQLString,
+          },
+          password: {
+            type: GraphQLString,
           },
         },
       },
