@@ -75,6 +75,23 @@ export const schema = new GraphQLSchema({
   mutation: new GraphQLObjectType({
     name: "Mutations",
     fields: {
+      user: {
+        type: User,
+        resolve: async (parent, args, context, info) => {
+          return await db_client.user.update({
+            data: {
+              email: args.email,
+            },
+            where: { uuid: context.user.uuid },
+          });
+        },
+        args: {
+          email: {
+            type: GraphQLString,
+          },
+        },
+      },
+
       signUp: {
         type: Token,
         resolve: async (parent, args, context, info) => {
