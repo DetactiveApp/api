@@ -5,6 +5,7 @@ import {
   GraphQLSchema,
   GraphQLString,
 } from "graphql";
+import jwt from "jsonwebtoken";
 import { Story } from "./story";
 import { db_client } from "..";
 import { Token } from "./authorization";
@@ -56,23 +57,59 @@ export const schema = new GraphQLSchema({
     fields: {
       signUp: {
         type: Token,
+        resolve: async (parent, args, context, info) => {
+          const user = await db_client.user.create({
+            data: {
+              email: args.email,
+              secret: await Bun.password.hash(args.password),
+              firstName: args.firstName,
+              lastName: args.lastName,
+            },
+            select: {
+              uuid: true,
+            },
+          });
+
+          if (!user) {
+            throw new Error("Wrong password.");
+          }
+
+          return jwt.sign({ user: user.uuid }, process.env.JWT_KEY!);
+        },
         args: {
           email: {
-            type: GraphQLString,
+            type: GraphQLString!,
           },
           password: {
-            type: GraphQLString,
+            type: GraphQLString!,
           },
           firstName: {
-            type: GraphQLString,
+            type: GraphQLString!,
           },
           lastName: {
-            type: GraphQLString,
+            type: GraphQLString!,
           },
         },
       },
       signIn: {
         type: Token,
+        resolve: async (parent, args, context, info) => {
+          const user = await db_client.user.findFirst({
+            where: {
+              email: args.email,
+            },
+          });
+
+          if (!user) {
+            throw new Error("Not found.");
+          }
+
+          if (await Bun.password.verify(args.password, user.secret)) {
+            return jwt.sign({ user: user.uuid }, process.env.JWT_KEY!);
+          }
+
+          throw new Error("Wrong password.");
+        },
         args: {
           email: {
             type: GraphQLString,

@@ -1,12 +1,13 @@
-import { allow, not, rule, shield } from "graphql-shield";
-import jwt, { decode } from "jsonwebtoken";
+import { allow, rule, shield } from "graphql-shield";
+import jwt from "jsonwebtoken";
 import { db_client } from "..";
 
 const guardRule = rule()(async (parent, args, ctx, info) => {
-  const token = ctx.request.headers.authorization.split(" ")[1];
-  const uuid = jwt.verify(token, process.env.JWT_KEY!).sub as string;
+  const token = ctx.request.headers.get("authorization").split(" ")[1];
+  const user = (jwt.verify(token, process.env.JWT_KEY!) as jwt.JwtPayload).user;
 
-  if ((await db_client.user.count({ where: { uuid: uuid } })) === 1) {
+  if ((await db_client.user.count({ where: { uuid: user } })) === 1) {
+    ctx.user = { uuid: user };
     return true;
   }
 
@@ -25,11 +26,6 @@ export const guard = shield(
     },
   },
   {
-    fallbackRule: allow,
-    debug: false,
-    allowExternalErrors: false,
-    hashFunction: function (arg: { parent: any; args: any }): string {
-      throw new Error("Function not implemented.");
-    },
+    allowExternalErrors: true,
   },
 );

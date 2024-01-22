@@ -5,6 +5,7 @@ export const Token = new GraphQLObjectType({
   fields: {
     token: {
       type: GraphQLString,
+      resolve: (token) => `Bearer ${token}`,
     },
   },
 });
