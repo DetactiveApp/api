@@ -14,10 +14,9 @@ You can start the api by running `bun run dev`.
 ```bash
 # http://localhost:3000
 # http://localhost:3000/graphql
-# http://localhost:3000/swagger
 ```
 
-NOTE: `/graphql` is not accessible in production without authorization.
+NOTE: The `/graphql` interface is only accessible during development (NODE_ENV).
 
 ## Run Tests
 
