@@ -9,10 +9,11 @@ import jwt from "jsonwebtoken";
 import { Story } from "./story";
 import { db_client } from "..";
 import { Token } from "./authorization";
+import { User } from "./user";
 
 export const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
-    name: "Query",
+    name: "Queries",
     fields: {
       ping: {
         type: GraphQLString,
@@ -50,11 +51,47 @@ export const schema = new GraphQLSchema({
           },
         },
       },
+      user: {
+        type: User,
+        resolve: async (parent, args, context, info) => {
+          const user =
+            Object.keys(args).length === 0
+              ? await db_client.user.findFirst({
+                  where: { uuid: context.user.uuid },
+                })
+              : await db_client.user.findFirst({
+                  where: { uuid: args.uuid },
+                });
+          return user;
+        },
+        args: {
+          uuid: {
+            type: GraphQLString,
+          },
+        },
+      },
     },
   }),
   mutation: new GraphQLObjectType({
-    name: "Mutation",
+    name: "Mutations",
     fields: {
+      user: {
+        type: User,
+        resolve: async (parent, args, context, info) => {
+          return await db_client.user.update({
+            data: {
+              email: args.email,
+            },
+            where: { uuid: context.user.uuid },
+          });
+        },
+        args: {
+          email: {
+            type: GraphQLString,
+          },
+        },
+      },
+
       signUp: {
         type: Token,
         resolve: async (parent, args, context, info) => {

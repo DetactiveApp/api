@@ -16,10 +16,11 @@ const guardRule = rule()(async (parent, args, ctx, info) => {
 
 export const guard = shield(
   {
-    Query: {
+    Queries: {
+      ping: allow,
       "*": guardRule,
     },
-    Mutation: {
+    Mutations: {
       signUp: allow,
       signIn: allow,
       "*": guardRule,
@@ -27,5 +28,6 @@ export const guard = shield(
   },
   {
     allowExternalErrors: true,
+    fallbackError: new Error("Not Authorized."),
   },
 );
