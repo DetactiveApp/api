@@ -7,13 +7,13 @@ export const User = new GraphQLObjectType({
       type: GraphQLString,
       resolve: (user) => user?.uuid,
     },
+    createdAt: {
+      type: GraphQLString,
+      resolve: (user) => user?.createdAt,
+    },
     email: {
       type: GraphQLString,
       resolve: (user) => user?.email,
-    },
-    secret: {
-      type: GraphQLString,
-      resolve: (user) => user?.secret,
     },
     firstName: {
       type: GraphQLString,
