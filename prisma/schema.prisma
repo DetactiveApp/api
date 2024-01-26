@@ -44,11 +44,11 @@ model Story {
 
 model User {
   uuid      String   @id @default(uuid())
-  email     String  @unique
+  email     String   @unique
   createdAt DateTime @default(now())
-  secret    String @default("")
-  firstName String
-  lastName  String
+  birthday  DateTime
+  secret    String
+  username  String   @unique
   game      Game[]
 }
 

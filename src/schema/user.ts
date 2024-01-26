@@ -5,23 +5,23 @@ export const User = new GraphQLObjectType({
   fields: {
     uuid: {
       type: GraphQLString,
-      resolve: (user) => user?.uuid,
-    },
-    createdAt: {
-      type: GraphQLString,
-      resolve: (user) => user?.createdAt,
+      resolve: (user) => user.uuid,
     },
     email: {
       type: GraphQLString,
-      resolve: (user) => user?.email,
+      resolve: (user) => user.email,
     },
-    firstName: {
+    createdAt: {
       type: GraphQLString,
-      resolve: (user) => user?.firstName,
+      resolve: (user) => user.createdAt,
     },
-    lastName: {
+    birthday: {
       type: GraphQLString,
-      resolve: (user) => user?.lastName,
+      resolve: (user) => user.birthday,
+    },
+    username: {
+      type: GraphQLString,
+      resolve: (user) => user.username,
     },
   },
 });

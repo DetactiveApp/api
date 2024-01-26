@@ -116,8 +116,8 @@ export const schema = new GraphQLSchema({
             data: {
               email: args.email,
               secret: await Bun.password.hash(args.password),
-              firstName: args.firstName,
-              lastName: args.lastName,
+              birthday: args.birthday,
+              username: args.username,
             },
             select: {
               uuid: true,
@@ -137,10 +137,10 @@ export const schema = new GraphQLSchema({
           password: {
             type: GraphQLString!,
           },
-          firstName: {
+          birthday: {
             type: GraphQLString!,
           },
-          lastName: {
+          username: {
             type: GraphQLString!,
           },
         },
