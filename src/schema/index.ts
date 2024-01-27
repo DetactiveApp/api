@@ -10,6 +10,7 @@ import { Story } from "./story";
 import { db_client } from "..";
 import { Token } from "./authorization";
 import { User } from "./user";
+import { Game } from "./game";
 
 export const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -22,10 +23,9 @@ export const schema = new GraphQLSchema({
       story: {
         type: Story,
         resolve: async (parent, args, context, info) => {
-          const story =
-            Object.keys(args).length === 0
-              ? await db_client.story.findFirst()
-              : await db_client.story.findFirst({ where: { uuid: args.uuid } });
+          const story = await db_client.story.findFirst({
+            where: { ...(args.uuid ? { uuid: args.uuid } : {}) },
+          });
           return story;
         },
         args: {
@@ -37,12 +37,9 @@ export const schema = new GraphQLSchema({
       stories: {
         type: new GraphQLList(Story),
         resolve: async (parent, args, context, info) => {
-          const stories =
-            Object.keys(args).length === 0
-              ? await db_client.story.findMany()
-              : await db_client.story.findMany({
-                  where: { active: args.active },
-                });
+          const stories = await db_client.story.findMany({
+            where: { ...(args.active ? { active: args.active } : {}) },
+          });
           return stories;
         },
         args: {
@@ -51,17 +48,37 @@ export const schema = new GraphQLSchema({
           },
         },
       },
+      game: {
+        type: Game,
+        resolve: async (parent, args, context, info) => {
+          const game = await db_client.game.findFirst({
+            where: {
+              ...(args.uuid ? { uuid: args.uuid } : {}),
+              ...(args.finishedAt ? { finishedAt: args.finishedAt } : {}),
+              ...(args.userUuid ? { userUuid: args.userUuid } : {}),
+            },
+          });
+          return game;
+        },
+        args: {
+          uuid: {
+            type: GraphQLString,
+          },
+          finishedAt: {
+            type: GraphQLString,
+          },
+        },
+      },
       user: {
         type: User,
         resolve: async (parent, args, context, info) => {
-          const user =
-            Object.keys(args).length === 0
-              ? await db_client.user.findFirst({
-                  where: { uuid: context.user.uuid },
-                })
-              : await db_client.user.findFirst({
-                  where: { uuid: args.uuid },
-                });
+          const user = await db_client.user.findFirst({
+            where: {
+              ...(args.uuid
+                ? { uuid: args.uuid }
+                : { uuid: context.user.uuid }),
+            },
+          });
           return user;
         },
         args: {
@@ -99,8 +116,8 @@ export const schema = new GraphQLSchema({
             data: {
               email: args.email,
               secret: await Bun.password.hash(args.password),
-              firstName: args.firstName,
-              lastName: args.lastName,
+              birthday: args.birthday,
+              username: args.username,
             },
             select: {
               uuid: true,
@@ -120,10 +137,10 @@ export const schema = new GraphQLSchema({
           password: {
             type: GraphQLString!,
           },
-          firstName: {
+          birthday: {
             type: GraphQLString!,
           },
-          lastName: {
+          username: {
             type: GraphQLString!,
           },
         },
