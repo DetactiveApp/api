@@ -12,8 +12,8 @@ model Decision {
   stepInputUuid  String
   stepOutputUuid String
   title          String
-  stepInput      Step   @relation("inputDecision", fields: [stepInputUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_step_input")
-  stepOutput     Step   @relation("outputDecision", fields: [stepOutputUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_step_output")
+  stepInput      Step?   @relation("inputDecision", fields: [stepInputUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_step_input")
+  stepOutput     Step?   @relation("outputDecision", fields: [stepOutputUuid], references: [uuid], onDelete: Cascade, onUpdate: NoAction, map: "fk_step_output")
 }
 
 model Step {
