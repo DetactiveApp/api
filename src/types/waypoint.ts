@@ -1,5 +1,4 @@
 import { GraphQLObjectType, GraphQLString } from "graphql";
-import { Coordinates } from "./coordinates";
 
 export const Waypoint = new GraphQLObjectType({
     name: "Waypoint",
@@ -11,10 +10,6 @@ export const Waypoint = new GraphQLObjectType({
         placeType: {
             type: GraphQLString,
             resolve: (waypoint) => waypoint.placeType
-        },
-        coordinates: {
-            type: Coordinates,
-            resolve: (waypoint) => waypoint.coordinates
         }
     }
 });
