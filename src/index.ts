@@ -1,5 +1,5 @@
 import { Elysia } from "elysia";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../prisma/generated/client";
 import cors from "@elysiajs/cors";
 import { createYoga } from "graphql-yoga";
 import { middleware } from "./middleware";
