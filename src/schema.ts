@@ -8,13 +8,15 @@ import {
   GraphQLString,
 } from "graphql";
 import jwt from "jsonwebtoken";
-import { Game, User, Token, Story } from "./types";
+import { Game, User, Token, Story, Validation } from "./types";
 import { dbClient } from ".";
 import { Coordinates } from "./types/coordinates";
 import {
+  ValidationExistCredentialsError,
   ValidationMissingCredentialsError,
   ValidationWrongCredentialsError,
 } from "./types/errors";
+import { Prisma } from "@prisma/client";
 
 export const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -23,6 +25,10 @@ export const schema = new GraphQLSchema({
       ping: {
         type: GraphQLString,
         resolve: () => "Pong!",
+      },
+      validation: {
+        type: Validation,
+        resolve: () => Validation,
       },
       story: {
         type: Story,
@@ -77,10 +83,10 @@ export const schema = new GraphQLSchema({
     fields: {
       user: {
         type: User,
-        resolve: async (parent, args, context, info) => {
+        resolve: async (_parent, args, context, _info) => {
           return await dbClient.user.update({
             data: {
-              email: args.email,
+              email: args.storyUuid,
             },
             where: { uuid: context.user.uuid },
           });
@@ -91,27 +97,25 @@ export const schema = new GraphQLSchema({
           },
         },
       },
-      game: {
+      start: {
         type: Game,
-        resolve: async (parent, args, context, info) => {
-          const game = await dbClient.game.findFirst({
-            where: {
-              ...(args.uuid ? { uuid: args.uuid } : {}),
-              ...(args.finishedAt ? { finishedAt: args.finishedAt } : {}),
-              ...(args.userUuid ? { userUuid: context.user.uuid } : {}),
-            },
-          });
+        resolve: async (_parent, args, context, _info) => {
           const userCoordinates: Coordinates = {
             latitude: args.userCoordinates.latitude,
             longitude: args.userCoordinates.longitude,
           };
+
+          const game = dbClient.game.create({
+            data: {
+              storyUuid: args.storyUuid,
+              userUuid: context.user.uuid,
+            },
+          });
+
           return { game, userCoordinates };
         },
         args: {
-          uuid: {
-            type: GraphQLString,
-          },
-          finishedAt: {
+          storyUuid: {
             type: GraphQLString,
           },
           userCoordinates: {
@@ -132,16 +136,23 @@ export const schema = new GraphQLSchema({
       signUp: {
         type: Token,
         resolve: async (parent, args, context, info) => {
-          const user = await dbClient.user.create({
-            data: {
-              email: args.email,
-              secret: await Bun.password.hash(args.password),
-              username: args.username,
-            },
-            select: {
-              uuid: true,
-            },
-          });
+          const user = await dbClient.user
+            .create({
+              data: {
+                email: args.email,
+                secret: await Bun.password.hash(args.password),
+                username: args.username,
+              },
+              select: {
+                uuid: true,
+              },
+            })
+            .catch((err: Prisma.PrismaClientKnownRequestError) => {
+              if (err.code == "P2002") {
+                // https://www.prisma.io/docs/orm/reference/error-reference#p2002
+                throw ValidationExistCredentialsError;
+              }
+            });
 
           if (!user) {
             throw ValidationMissingCredentialsError;
@@ -163,7 +174,7 @@ export const schema = new GraphQLSchema({
       },
       signIn: {
         type: Token,
-        resolve: async (parent, args, context, info) => {
+        resolve: async (_parent, args, _context, _info) => {
           const user = await dbClient.user.findFirst({
             where: {
               email: args.email,

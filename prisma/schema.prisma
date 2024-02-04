@@ -52,7 +52,7 @@ model User {
 }
 
 model Game {
-  uuid       String     @id
+  uuid       String     @id @default(uuid())
   storyUuid  String
   userUuid   String
   createdAt  DateTime   @default(now())

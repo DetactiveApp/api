@@ -19,6 +19,7 @@ export const guard = shield(
   {
     Queries: {
       ping: allow,
+      validation: allow,
       "*": guardRule,
     },
     Mutations: {
