@@ -15,10 +15,6 @@ export const User = new GraphQLObjectType({
       type: GraphQLString,
       resolve: (user) => user?.email,
     },
-    birthday: {
-      type: GraphQLString,
-      resolve: (user) => user.birthday,
-    },
     username: {
       type: GraphQLString,
       resolve: (user) => user.username,
