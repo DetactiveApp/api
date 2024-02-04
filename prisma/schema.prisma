@@ -46,7 +46,6 @@ model User {
   uuid      String   @id @default(uuid())
   email     String   @unique
   createdAt DateTime @default(now())
-  birthday  DateTime
   secret    String
   username  String   @unique
   game      Game[]
