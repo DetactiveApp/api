@@ -5,7 +5,7 @@ WORKDIR /app
 COPY . .
 
 RUN bun install --production
-RUN bunx prisma generate
+RUN bun prisma generate
 
 ENV NODE_ENV production
 CMD ["bun", "src/index.ts"]
