@@ -12,11 +12,15 @@ import { Game, User, Token, Story, Validation } from "./types";
 import { dbClient } from ".";
 import { Coordinates } from "./types/coordinates";
 import {
+  ValidationEMailInvalidError,
   ValidationExistCredentialsError,
   ValidationMissingCredentialsError,
+  ValidationPasswordInvalidError,
+  ValidationUsernameInvalidError,
   ValidationWrongCredentialsError,
 } from "./types/errors";
 import { Prisma } from "@prisma/client";
+import Validations from "../configs/validations.json";
 
 export const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -135,7 +139,19 @@ export const schema = new GraphQLSchema({
       },
       signUp: {
         type: Token,
-        resolve: async (parent, args, context, info) => {
+        resolve: async (_parent, args, _context, _info) => {
+          if (!new RegExp(Validations.username).test(args.username)) {
+            throw ValidationUsernameInvalidError;
+          }
+
+          if (!new RegExp(Validations.email).test(args.email)) {
+            throw ValidationEMailInvalidError;
+          }
+
+          if (!new RegExp(Validations.password).test(args.password)) {
+            throw ValidationPasswordInvalidError;
+          }
+
           const user = await dbClient.user
             .create({
               data: {
