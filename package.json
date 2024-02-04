@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "@elysiajs/cors": "^0.8.0",
-    "@prisma/client": "5.8.1",
+    "@prisma/client": "5.9.1",
     "elysia": "latest",
     "graphql": "^16.8.1",
     "graphql-middleware": "^6.1.35",
@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "bun-types": "latest",
-    "prisma": "^5.8.1"
+    "prisma": "5.9.1"
   },
   "module": "src/index.js"
 }
