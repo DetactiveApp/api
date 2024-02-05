@@ -8,4 +8,5 @@ export { GameStep } from "./gameStep";
 export { Game } from "./game";
 export { Token } from "./token";
 export { Validation } from "./validation";
+export { UserCoordinates } from "./userCoordinates";
 export * as errors from "./errors";

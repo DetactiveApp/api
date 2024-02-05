@@ -6,19 +6,19 @@ export const Game = new GraphQLObjectType({
   fields: {
     uuid: {
       type: GraphQLString,
-      resolve: ({ game }) => game.uuid,
+      resolve: (game) => game.uuid,
     },
     createdAt: {
       type: GraphQLString,
-      resolve: ({ game }) => game.createdAt,
+      resolve: (game) => game.createdAt,
     },
     finishedAt: {
       type: GraphQLString,
-      resolve: ({ game }) => game.finishedAt,
+      resolve: (game) => game.finishedAt,
     },
     story: {
       type: Story,
-      resolve: ({ game }) => game.story,
+      resolve: (game) => game.story,
     },
   },
 });

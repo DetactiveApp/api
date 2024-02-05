@@ -5,19 +5,19 @@ export const Story = new GraphQLObjectType({
   fields: {
     uuid: {
       type: GraphQLString,
-      resolve: (story) => story?.uuid,
+      resolve: (story) => story.uuid,
     },
     title: {
       type: GraphQLString,
-      resolve: (story) => story?.title,
+      resolve: (story) => story.title,
     },
     description: {
       type: GraphQLString,
-      resolve: (story) => story?.description,
+      resolve: (story) => story.description,
     },
     active: {
       type: GraphQLBoolean,
-      resolve: (story) => story?.active,
+      resolve: (story) => story.active,
     },
   },
 });
