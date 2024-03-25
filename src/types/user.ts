@@ -1,4 +1,5 @@
-import { GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLEnumType, GraphQLObjectType, GraphQLString } from "graphql";
+import { Authorizer } from "./authorizer";
 
 export const User = new GraphQLObjectType({
   name: "User",
@@ -6,6 +7,10 @@ export const User = new GraphQLObjectType({
     uuid: {
       type: GraphQLString,
       resolve: (user) => user.uuid,
+    },
+    authorizer: {
+      type: Authorizer,
+      resolve: (user) => user?.authorizer,
     },
     createdAt: {
       type: GraphQLString,
