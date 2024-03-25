@@ -17,6 +17,7 @@
     "prettier": "^3.2.4"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.5",
     "bun-types": "latest",
     "prisma": "5.9.1"
   },

@@ -1,11 +1,6 @@
 export { User } from "./user";
-export type { Coordinates } from "./coordinates";
-export { Waypoint } from "./waypoint";
-export { Media } from "./media";
-export { Step } from "./step";
-export { Story } from "./story";
-export { GameStep } from "./gameStep";
-export { Game } from "./game";
+export type { Coordinate } from "./coordinate";
 export { Token } from "./token";
 export { Validation } from "./validation";
 export * as errors from "./errors";
+export { Authorizer } from "./authorizer";
