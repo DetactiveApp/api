@@ -1,5 +1,5 @@
 import { GraphQLObjectType, GraphQLString } from "graphql";
-import { Game, GameStep, Token, User } from "../types";
+import { Authorizer, Token, User } from "../types";
 import { dbClient } from "..";
 import {
   ValidationEMailInvalidError,
@@ -32,30 +32,6 @@ export const mutation = new GraphQLObjectType({
         },
       },
     },
-    createGame: {
-      type: Game,
-      resolve: (_parent, args, context, _info) =>
-        dbClient.game.create({
-          data: {
-            storyUuid: args.storyUuid,
-            userUuid: context.user.uuid,
-          },
-        }),
-      args: {
-        storyUuid: {
-          type: GraphQLString,
-        },
-      },
-    },
-    nextStep: {
-      type: GameStep,
-      resolve: (_parent, args, context, _info) => {},
-      args: {
-        gameUuid: {
-          type: GraphQLString,
-        },
-      },
-    },
     signUp: {
       type: Token,
       resolve: async (_parent, args, _context, _info) => {
@@ -77,6 +53,7 @@ export const mutation = new GraphQLObjectType({
               email: args.email,
               secret: await Bun.password.hash(args.password),
               username: args.username,
+              authorizer: args.authorizer
             },
             select: {
               uuid: true,
@@ -105,6 +82,9 @@ export const mutation = new GraphQLObjectType({
         username: {
           type: GraphQLString!,
         },
+        authorizer: {
+          type: Authorizer!
+        }
       },
     },
     signIn: {

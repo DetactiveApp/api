@@ -1,9 +1,9 @@
-import { Coordinates } from "./types";
+import { Coordinate } from "./types";
 
 export const nextCoordinate = async (
-  userPosition: Coordinates,
-  lastCoordinates: Coordinates | null,
-): Promise<Coordinates> => {
+  userPosition: Coordinate,
+  lastCoordinates: Coordinate | null,
+): Promise<Coordinate> => {
   const profile = "mapbox/walking";
   const url = `https://api.mapbox.com/isochrone/v1/${profile}/${userPosition.longitude},${userPosition.latitude}?contours_minutes=4%2C5&denoise=1&generalize=0&access_token=${process.env.MAPBOX_KEY!}`;
 
