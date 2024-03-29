@@ -31,10 +31,6 @@ export const mutation = new GraphQLObjectType({
     signUp: {
       type: Token,
       resolve: async (_parent, args, _context, _info) => {
-        if (args.authority !== "detactive") {
-          return;
-        }
-
         if (!new RegExp(Validations.username).test(args.username)) {
           throw ValidationUsernameInvalidError;
         }
