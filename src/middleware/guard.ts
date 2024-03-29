@@ -1,7 +1,7 @@
 import { allow, rule, shield } from "graphql-shield";
 import jwt from "jsonwebtoken";
-import { dbClient } from "..";
-import { AuthorizationNotAuthorized } from "../types/errors/authorization";
+import { db } from "..";
+import { AuthorizationNotAuthorized } from "../types/graphql/errors/authorization";
 
 const guardRule = rule()(async (_parent, _args, ctx, _info) => {
   const token = ctx.request.headers.get("authorization").split(" ")[1];

@@ -1,17 +1,9 @@
-import { GraphQLObjectType, GraphQLString } from "graphql";
-import { Authorizer, Token, User } from "../types";
-import { dbClient } from "..";
-import {
-  ValidationEMailInvalidError,
-  ValidationExistCredentialsError,
-  ValidationMissingCredentialsError,
-  ValidationPasswordInvalidError,
-  ValidationUsernameInvalidError,
-  ValidationWrongCredentialsError,
-} from "../types/errors";
-import { Prisma } from "../../prisma/generated/client";
-import Validations from "../../configs/validations.json";
 import jwt from "jsonwebtoken";
+import { GraphQLObjectType, GraphQLString } from "graphql";
+import Validations from "../../configs/validations.json";
+import { Authority, Token, User } from "../types/graphql";
+import { db } from "..";
+import { ValidationEMailInvalidError, ValidationExistCredentialsError, ValidationMissingCredentialsError, ValidationPasswordInvalidError, ValidationUsernameInvalidError, ValidationWrongCredentialsError } from "../types/graphql/errors";
 
 export const mutation = new GraphQLObjectType({
   name: "Mutations",
@@ -82,8 +74,8 @@ export const mutation = new GraphQLObjectType({
         username: {
           type: GraphQLString!,
         },
-        authorizer: {
-          type: Authorizer!
+        authority: {
+          type: Authority!
         }
       },
     },
