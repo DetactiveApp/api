@@ -1,4 +1,4 @@
-import { GraphQLFloat, GraphQLObjectType } from "graphql";
+import { GraphQLFloat, GraphQLInputObjectType, GraphQLObjectType } from "graphql";
 
 export const Coordinate = new GraphQLObjectType({
     name: "Coordinate",
@@ -9,7 +9,19 @@ export const Coordinate = new GraphQLObjectType({
         },
         longitude: {
             type: GraphQLFloat,
-            resolve: (coordinate) => coordinate.longitude,
+            resolve: (coordinate) => coordinate.latitude,
+        },
+    },
+});
+
+export const CoordinateInput = new GraphQLInputObjectType({
+    name: "CoordinateInput",
+    fields: {
+        latitude: {
+            type: GraphQLFloat,
+        },
+        longitude: {
+            type: GraphQLFloat,
         },
     },
 });

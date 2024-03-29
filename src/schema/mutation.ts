@@ -1,11 +1,12 @@
 import jwt from "jsonwebtoken";
-import { GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
 import Validations from "../../configs/validations.json";
-import { Authority, Token, User } from "../types/graphql";
-import { ValidationEMailInvalidError, ValidationExistCredentialsError, ValidationMissingCredentialsError, ValidationPasswordInvalidError, ValidationUsernameInvalidError, ValidationWrongCredentialsError } from "../types/graphql/errors";
+import { Authority, Coordinate, CoordinateInput, Token, User, Item } from "../types/graphql";
+import { ItemsPositionMissingError, ValidationEMailInvalidError, ValidationExistCredentialsError, ValidationMissingCredentialsError, ValidationPasswordInvalidError, ValidationUsernameInvalidError, ValidationWrongCredentialsError } from "../types/graphql/errors";
 import { drizzle } from 'drizzle-orm/neon-http';
 import { neon } from "@neondatabase/serverless";
 import * as schema from "../db";
+import { generateItems } from "../items";
 
 const sql = neon(process.env.DATABASE_URL!)
 const db = drizzle(sql, { schema })
@@ -44,7 +45,6 @@ export const mutation = new GraphQLObjectType({
         }
 
         const user = await db.insert(schema.users).values({ username: args.username, authority: args.authority, email: args.email, secret: await Bun.password.hash(args.password) }).returning({ id: schema.users.id });
-
         if (!user) {
           throw ValidationMissingCredentialsError;
         }
@@ -91,6 +91,20 @@ export const mutation = new GraphQLObjectType({
           type: GraphQLString,
         },
       },
+    },
+    items: {
+      type: new GraphQLList(Item),
+      resolve: async (_parent, args, _context, _info) => {
+        if (!args.position) {
+          throw ItemsPositionMissingError;
+        }
+        return await generateItems({ latitude: args.position.latitude, longitude: args.position.longitude })
+      },
+      args: {
+        position: {
+          type: CoordinateInput!
+        }
+      }
     },
   },
 });

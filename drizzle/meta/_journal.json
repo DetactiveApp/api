@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1711709699386,
-      "tag": "0000_strong_omega_sentinel",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1711711048879,
-      "tag": "0001_wooden_ultron",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1711721485099,
-      "tag": "0002_puzzling_magneto",
+      "when": 1711740711550,
+      "tag": "0000_wide_talisman",
       "breakpoints": true
     }
   ]

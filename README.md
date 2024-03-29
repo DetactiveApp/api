@@ -30,6 +30,12 @@ Push to database
 bunx drizzle-kit push:pg
 ```
 
+Run Drizzle Studio locally
+
+```
+bunx drizzle-kit studio
+```
+
 NOTE: The `/graphql` interface is only accessible during development (NODE_ENV).
 
 ## Run Tests

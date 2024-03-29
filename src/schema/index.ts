@@ -6,3 +6,4 @@ export const schema = new GraphQLSchema({
   query: query,
   mutation: mutation,
 });
+
