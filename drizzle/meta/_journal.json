@@ -15,6 +15,13 @@
       "when": 1711711048879,
       "tag": "0001_wooden_ultron",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1711721485099,
+      "tag": "0002_puzzling_magneto",
+      "breakpoints": true
     }
   ]
 }

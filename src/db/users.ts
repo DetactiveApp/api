@@ -1,6 +1,6 @@
-import { pgEnum, pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
+import { authorityEnum, dtCoordinates } from './types';
 
-export const authorityEnum = pgEnum('authority', ['detactive']);
 
 export const users = pgTable('users', {
     id: uuid('id').primaryKey().unique().defaultRandom().notNull(),
@@ -9,4 +9,5 @@ export const users = pgTable('users', {
     createdAt: timestamp('createdAt').defaultNow().notNull(),
     secret: text('secret').notNull(),
     authority: authorityEnum('authority').notNull(),
+    position: dtCoordinates('position')
 });

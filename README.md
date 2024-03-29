@@ -11,9 +11,23 @@ Make sure that you have set up the environment variables as in the [template](./
 
 You can start the api by running `bun run dev`.
 
-```bash
-# http://localhost:3000
-# http://localhost:3000/graphql
+```
+http://localhost:3000
+http://localhost:3000/graphql
+```
+
+## Database Actions
+
+Generate new typed schema
+
+```
+bunx drizzle-kit generate:pg
+```
+
+Push to database
+
+```
+bunx drizzle-kit push:pg
 ```
 
 NOTE: The `/graphql` interface is only accessible during development (NODE_ENV).
@@ -28,7 +42,7 @@ bun test:unit
 
 ## Tech Stack
 
-Core: [Elysia.js](https://elysiajs.com/), [Typescript](https://www.typescriptlang.org/) <br>
+Core: [Elysia.js](https://elysiajs.com/), [Typescript](https://www.typescriptlang.org/), [Drizzle]("https://orm.drizzle.team/")<br>
 Code Quality: [Prettier](https://prettier.io/) <br>
 Testing: [Bun Test](https://bun.sh/docs/cli/test)
 
