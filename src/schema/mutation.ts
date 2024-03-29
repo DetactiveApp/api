@@ -2,8 +2,13 @@ import jwt from "jsonwebtoken";
 import { GraphQLObjectType, GraphQLString } from "graphql";
 import Validations from "../../configs/validations.json";
 import { Authority, Token, User } from "../types/graphql";
-import { db } from "..";
 import { ValidationEMailInvalidError, ValidationExistCredentialsError, ValidationMissingCredentialsError, ValidationPasswordInvalidError, ValidationUsernameInvalidError, ValidationWrongCredentialsError } from "../types/graphql/errors";
+import { drizzle } from 'drizzle-orm/neon-http';
+import { neon } from "@neondatabase/serverless";
+import * as schema from "../db";
+
+const sql = neon(process.env.DATABASE_URL!)
+const db = drizzle(sql, { schema })
 
 export const mutation = new GraphQLObjectType({
   name: "Mutations",
@@ -11,11 +16,10 @@ export const mutation = new GraphQLObjectType({
     user: {
       type: User,
       resolve: async (_parent, args, context, _info) => {
-        return await dbClient.user.update({
-          data: {
-            email: args.storyUuid,
-          },
-          where: { uuid: context.user.uuid },
+        return await db.query.users.findFirst({
+          with: {
+            email: args.email
+          }
         });
       },
       args: {
@@ -27,6 +31,10 @@ export const mutation = new GraphQLObjectType({
     signUp: {
       type: Token,
       resolve: async (_parent, args, _context, _info) => {
+        if (args.authority !== "detactive") {
+          return;
+        }
+
         if (!new RegExp(Validations.username).test(args.username)) {
           throw ValidationUsernameInvalidError;
         }
@@ -39,30 +47,13 @@ export const mutation = new GraphQLObjectType({
           throw ValidationPasswordInvalidError;
         }
 
-        const user = await dbClient.user
-          .create({
-            data: {
-              email: args.email,
-              secret: await Bun.password.hash(args.password),
-              username: args.username,
-              authorizer: args.authorizer
-            },
-            select: {
-              uuid: true,
-            },
-          })
-          .catch((err: Prisma.PrismaClientKnownRequestError) => {
-            if (err.code == "P2002") {
-              // https://www.prisma.io/docs/orm/reference/error-reference#p2002
-              throw ValidationExistCredentialsError;
-            }
-          });
+        const user = await db.insert(schema.users).values({ username: args.username, authority: args.authority, email: args.email, secret: await Bun.password.hash(args.password) }).returning({ id: schema.users.id });
 
         if (!user) {
           throw ValidationMissingCredentialsError;
         }
 
-        return jwt.sign({ user: user.uuid }, process.env.JWT_KEY!);
+        return jwt.sign({ sub: user }, process.env.JWT_KEY!);
       },
       args: {
         email: {
@@ -82,10 +73,8 @@ export const mutation = new GraphQLObjectType({
     signIn: {
       type: Token,
       resolve: async (_parent, args, _context, _info) => {
-        const user = await dbClient.user.findFirst({
-          where: {
-            email: args.email,
-          },
+        const user = await db.query.users.findFirst({
+          where: (users, { eq }) => eq(users.email, args.email)
         });
 
         if (!user) {
@@ -93,7 +82,7 @@ export const mutation = new GraphQLObjectType({
         }
 
         if (await Bun.password.verify(args.password, user.secret)) {
-          return jwt.sign({ user: user.uuid }, process.env.JWT_KEY!);
+          return jwt.sign({ sub: user.id }, process.env.JWT_KEY!);
         }
 
         throw ValidationWrongCredentialsError;

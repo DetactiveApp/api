@@ -1,12 +1,7 @@
 import { Elysia } from "elysia";
 import cors from "@elysiajs/cors";
-import { neon } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-http';
 import { createYoga } from "graphql-yoga";
 import { middleware } from "./middleware";
-
-const sql = neon(process.env.DATABASE_URL!);
-export const db = drizzle(sql);
 
 const apiVersion = require("../package.json").version;
 
