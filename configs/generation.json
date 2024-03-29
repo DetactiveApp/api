@@ -2,7 +2,7 @@
   "items": {
     "minCount": 2,
     "maxCount": 10,
-    "minExpiration": 60,
-    "maxExpiration": 240
+    "minExpiration": 1,
+    "maxExpiration": 15
   }
 }
