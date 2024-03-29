@@ -7,6 +7,7 @@ import { drizzle } from 'drizzle-orm/neon-http';
 import { neon } from "@neondatabase/serverless";
 import * as schema from "../db";
 import { generateItems } from "../items";
+import { eq } from "drizzle-orm";
 
 const sql = neon(process.env.DATABASE_URL!)
 const db = drizzle(sql, { schema })
@@ -16,7 +17,7 @@ export const mutation = new GraphQLObjectType({
   fields: {
     user: {
       type: User,
-      resolve: async (_parent, args, context, _info) => {
+      resolve: async (_parent, args, _context, _info) => {
         return await db.query.users.findFirst({
           with: {
             email: args.email
@@ -94,10 +95,11 @@ export const mutation = new GraphQLObjectType({
     },
     items: {
       type: new GraphQLList(Item),
-      resolve: async (_parent, args, _context, _info) => {
+      resolve: async (_parent, args, context, _info) => {
         if (!args.position) {
           throw ItemsPositionMissingError;
         }
+        db.update(schema.users).set({ position: JSON.stringify(args.position) }).where(eq(schema.users.id, context.user.id)).execute()
         return await generateItems({ latitude: args.position.latitude, longitude: args.position.longitude })
       },
       args: {
