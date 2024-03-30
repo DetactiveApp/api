@@ -1,7 +1,7 @@
 import { GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql";
 import { Validation } from "../types/graphql";
 import { SignInMutation, SignUpMutation, UserMutation, UserQuery } from "./user";
-import { ItemsMutation, PickUpItem } from "./item";
+import { ItemsMutation, MyItemsQuery, PickUpItem } from "./item";
 
 export const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -15,7 +15,8 @@ export const schema = new GraphQLSchema({
         type: Validation,
         resolve: () => Validation,
       },
-      user: UserQuery
+      user: UserQuery,
+      myItems: MyItemsQuery,
     },
   }),
   mutation: new GraphQLObjectType({
