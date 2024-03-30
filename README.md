@@ -48,7 +48,7 @@ bun test:unit
 
 ## Tech Stack
 
-Core: [Elysia.js](https://elysiajs.com/), [Typescript](https://www.typescriptlang.org/), [Drizzle]("https://orm.drizzle.team/")<br>
+Core: [Elysia.js](https://elysiajs.com/), [Typescript](https://www.typescriptlang.org/), [Drizzle](https://orm.drizzle.team/), [GraphQL](https://www.npmjs.com/package/graphql), [GraphQL Yoga](https://the-guild.dev/graphql/yoga-server), [GraphQL Shield](https://the-guild.dev/graphql/shield), [GraphQL Middleware](https://the-guild.dev/graphql/modules/docs/advanced/middlewares)<br>
 Code Quality: [Prettier](https://prettier.io/) <br>
 Testing: [Bun Test](https://bun.sh/docs/cli/test)
 
