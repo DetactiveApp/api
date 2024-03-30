@@ -32,6 +32,10 @@ export const generateItems = async (position: Coordinate) => {
         }
     }
 
+    if (items.length > GenerationConfig.items.minCount + 1) {
+        return items;
+    }
+
     for (let i = 0; i < itemCount; i++) {
         if (positions.length === 0) {
             return items;
