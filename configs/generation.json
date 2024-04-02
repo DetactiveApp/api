@@ -1,6 +1,6 @@
 {
   "items": {
-    "minCount": 2,
+    "minCount": 10,
     "maxCount": 10,
     "minExpiration": 1,
     "maxExpiration": 15

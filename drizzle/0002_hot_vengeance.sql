@@ -1,0 +1,1 @@
+ALTER TABLE "itemTypes" ALTER COLUMN "spawnProbability" SET DATA TYPE real;

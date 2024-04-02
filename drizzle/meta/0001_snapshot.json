@@ -1,6 +1,6 @@
 {
-  "id": "ab5b96d9-cad9-4d71-86c5-c2121636ec44",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "ad84dd40-b26e-4a22-882c-da29c059b2f6",
+  "prevId": "ab5b96d9-cad9-4d71-86c5-c2121636ec44",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -166,8 +166,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "spawn_probability": {
-          "name": "spawn_probability",
+        "spawnProbability": {
+          "name": "spawnProbability",
           "type": "serial",
           "primaryKey": false,
           "notNull": true

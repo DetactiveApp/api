@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS "users" (
 CREATE TABLE IF NOT EXISTS "itemTypes" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" varchar(32) NOT NULL,
+	"spawn_probability" serial NOT NULL,
 	CONSTRAINT "itemTypes_id_unique" UNIQUE("id"),
 	CONSTRAINT "itemTypes_name_unique" UNIQUE("name")
 );

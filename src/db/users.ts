@@ -13,3 +13,8 @@ export const users = pgTable('users', {
     authority: authorityEnum('authority').notNull(),
     position: dtCoordinates('position')
 });
+
+
+export const usersRelations = relations(users, ({ many }) => ({
+    items: many(items)
+}))

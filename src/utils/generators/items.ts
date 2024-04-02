@@ -26,9 +26,13 @@ export const generateItems = async (position: Coordinate) => {
         const item = allItems[i]
         const item_position = item.position as Coordinate;
         const distance = distanceInMeters(item_position, position);
-        if (distance < maxDistance) {
-            items.push(item)
-            itemCount--;
+        if (distance < maxDistance && item) {
+            let itemType = await db.query.itemTypes.findFirst({ where: (itemTypes, { eq }) => eq(itemTypes.id, item.itemType as string) })
+            if (itemType) {
+                Object.assign(itemType, item);
+                items.push(itemType)
+                itemCount--;
+            }
         }
     }
 
@@ -44,8 +48,10 @@ export const generateItems = async (position: Coordinate) => {
         const position = positions[Math.floor(Math.random() * positions.length)]
         positions.splice(positions.indexOf(position), 1)
 
-        const item = generateItem(position)
-        items.push(item)
+        const item = await generateItem(position)
+        if (item) {
+            items.push(item)
+        }
     }
 
     return items

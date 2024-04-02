@@ -1,6 +1,6 @@
 {
-  "id": "ab5b96d9-cad9-4d71-86c5-c2121636ec44",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "91036085-a21d-47bb-be0b-d15638dc412c",
+  "prevId": "4218f578-75da-409f-8ed0-e038b560a075",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -41,34 +41,7 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "items_itemType_itemTypes_id_fk": {
-          "name": "items_itemType_itemTypes_id_fk",
-          "tableFrom": "items",
-          "tableTo": "itemTypes",
-          "columnsFrom": [
-            "itemType"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "items_authority_users_id_fk": {
-          "name": "items_authority_users_id_fk",
-          "tableFrom": "items",
-          "tableTo": "users",
-          "columnsFrom": [
-            "authority"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "items_id_unique": {
@@ -166,9 +139,9 @@
           "primaryKey": false,
           "notNull": true
         },
-        "spawn_probability": {
-          "name": "spawn_probability",
-          "type": "serial",
+        "spawnProbability": {
+          "name": "spawnProbability",
+          "type": "real",
           "primaryKey": false,
           "notNull": true
         }

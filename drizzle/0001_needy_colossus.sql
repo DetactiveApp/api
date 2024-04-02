@@ -1,0 +1,1 @@
+ALTER TABLE "itemTypes" RENAME COLUMN "spawn_probability" TO "spawnProbability";
