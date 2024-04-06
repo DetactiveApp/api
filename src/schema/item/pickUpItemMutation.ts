@@ -13,34 +13,28 @@ const db = drizzle(sql, { schema })
 export const PickUpItem: GraphQLFieldConfig<any, any, any> = {
     type: Item,
     resolve: async (_parent, args, context, _info) => {
-        let item = await db.query.items.findFirst({ where: eq(schema.items.id, args.itemId) })
-        if (!item) {
+        const cItem = await db.query.items.findFirst({ where: eq(schema.items.id, args.itemId) })
+        if (!cItem) {
             throw ItemNotFoundError;
         }
 
-        if (item.authority != null) {
+        if (cItem.authority != null) {
             throw ItemWrongAuthorityError
         }
 
-        if (item.expiration && +(new Date()) > +item.expiration) {
+        if (cItem.expiration && +(new Date()) > +cItem.expiration) {
             throw ItemExpiredError
         }
 
-        item = (await db.update(schema.items).set({ position: null, authority: context.user.id }).where(eq(schema.items.id, args.itemId)).returning().execute())[0];
-        console.log(item)
-        if (!item) {
-            throw ItemNotFoundError
+        await db.update(schema.items).set({ position: null, authority: context.user.id }).where(eq(schema.items.id, args.itemId)).execute();
+
+        let item = await db.query.items.findFirst({ where: (items, { eq }) => eq(items.id, args.itemId), with: { itemType: true } });
+        if (item) {
+            item = Object.assign(item, (item.itemType as {}));
+            return item;
         }
 
-        let itemType = await db.query.itemTypes.findFirst({ where: eq(schema.itemTypes.id, item.itemType as string) });
-
-        if (!itemType) {
-            throw ItemNotFoundError
-        }
-
-        Object.assign(itemType, item)
-
-        return itemType;
+        throw ItemNotFoundError;
     },
     args: {
         itemId: {

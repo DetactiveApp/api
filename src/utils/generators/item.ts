@@ -2,7 +2,6 @@ import { neon } from "@neondatabase/serverless";
 import { Coordinate } from "../../types"
 import { drizzle } from "drizzle-orm/neon-http";
 import * as schema from "../../db";
-import GenerationConfig from "../../../configs/generation.json";
 
 const sql = neon(process.env.DATABASE_URL!)
 const db = drizzle(sql, { schema })
@@ -24,7 +23,7 @@ export const generateItem = async (position: Coordinate) => {
 
     if (!itemType) return null;
 
-    const minutes = Math.floor(Math.random() * (GenerationConfig.items.maxExpiration - GenerationConfig.items.minExpiration + 1) + GenerationConfig.items.minExpiration)
+    const minutes = Math.floor(Math.random() * (itemType.maxExpiration - itemType.minExpiration + 1) + itemType.minExpiration)
     const expiration = new Date();
     expiration.setMinutes(expiration.getMinutes() + minutes);
 

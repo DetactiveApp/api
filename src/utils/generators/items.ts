@@ -6,7 +6,7 @@ import { Coordinate } from "../../types"
 import GenerationConfig from "../../../configs/generation.json";
 import { and, isNotNull, lt } from "drizzle-orm";
 import { generateItem } from "./item";
-import { distanceInMeters } from "../math";
+import { distanceInMetres } from "../math";
 import { getPositions } from "../mapbox";
 
 const sql = neon(process.env.DATABASE_URL!)
@@ -14,7 +14,7 @@ const db = drizzle(sql, { schema })
 
 export const generateItems = async (position: Coordinate) => {
     const positions = await getPositions(position);
-    const maxDistance = Math.max(...positions.map(p => distanceInMeters(p, position)));
+    const maxDistance = Math.max(...positions.map(p => distanceInMetres(p, position)));
 
     let items: {}[] = []
     let itemCount = Math.floor(Math.random() * (GenerationConfig.items.maxCount - GenerationConfig.items.minCount + 1) + GenerationConfig.items.minCount)
@@ -25,7 +25,7 @@ export const generateItems = async (position: Coordinate) => {
     for (const i in allItems) {
         const item = allItems[i]
         const item_position = item.position as Coordinate;
-        const distance = distanceInMeters(item_position, position);
+        const distance = distanceInMetres(item_position, position);
         if (distance < maxDistance && item) {
             let itemType = await db.query.itemTypes.findFirst({ where: (itemTypes, { eq }) => eq(itemTypes.id, item.itemType as string) })
             if (itemType) {

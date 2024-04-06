@@ -2,7 +2,7 @@ import { Coordinate } from "../types"
 
 // Haversine formula
 // https://www.movable-type.co.uk/scripts/latlong.html
-export const distanceInMeters = (position1: Coordinate, position2: Coordinate) => {
+export const distanceInMetres = (position1: Coordinate, position2: Coordinate) => {
     const R = 6371e3; // metres
     const φ1 = position1.latitude * Math.PI / 180;
     const φ2 = position2.latitude * Math.PI / 180;
