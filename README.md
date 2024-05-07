@@ -1,3 +1,5 @@
+Detactive is no longer active, so we decided to open source various services.
+
 # Detactive API
 
 Game logic, user authentication and more.
